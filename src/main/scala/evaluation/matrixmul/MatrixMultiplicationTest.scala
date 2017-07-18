@@ -14,6 +14,17 @@ import scalaadaptive.core.configuration.defaults.DefaultConfiguration
 
 /**
   * Created by Petr Kubat on 7/3/17.
+  *
+  * The matrix multiplication evaluation test. The randomly generated matrices of size between minMatrixSize and
+  * maxMatrixSize are multiplied runCount times using the two simple algorithms and the combined one.
+  *
+  * The output (printed to standard output) are lines in the following format (for each run):
+  * "${res.inputSize}, ${res.combinedTime}, ${res.normalTime}, ${res.strassenTime}"
+  *
+  * The lines are sorted by input size (for simpler plotting).
+  *
+  * The last line of the output are the sums of the times.
+  *
   */
 object MatrixMultiplicationTest {
   val runCount = 200

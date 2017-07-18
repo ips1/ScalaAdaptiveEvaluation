@@ -1,10 +1,10 @@
-/**
-  * Created by Petr Kubat on 4/30/17.
-  */
 package evaluation.methodnames
 
 import commonutils.Sorter
 
+/**
+  * Simple test that creates a couple of adaptive functions and prints out the assigned identifiers.
+  */
 object MethodNamesTester {
   import scala.math._
   import scalaadaptive.api.Implicits._

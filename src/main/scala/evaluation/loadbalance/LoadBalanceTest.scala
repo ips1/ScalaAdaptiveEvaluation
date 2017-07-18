@@ -6,10 +6,24 @@ import scalaadaptive.core.configuration.defaults.DefaultConfiguration
 
 /**
   * Created by Petr Kubat on 5/14/17.
+  *
+  * The load balancing test. Note that the simple Node.js server that is provided along with the package has to be
+  * running on the same machine (i.e. accessible via localhost) in two instances on two ports (firstPort and secondPort).
+  *
+  * Each one of the scenarios consists of a couple of stages. In each stage, stageRunCount requests will be sent using
+  * both the simple requests and the combined one. After sending all three, the test actively waits for waitTimeMilis
+  * before sending another one.
+  *
+  * The scenarios change the response times of the servers between stages using special requests. Custom scenarios
+  * can be designed.
+  *
+  * The output of the test (printed to the standard output) are the response times of the request to the first server,
+  * request to the second server and combined request, separated by commas.
+  *
   */
 object LoadBalanceTest {
   val stageRunCount = 50
-  val testDurationMilis = 500
+  val waitTimeMilis = 500
   val testController = new LoadBalanceTestController()
 
   // Configure ports correctly
@@ -32,7 +46,7 @@ object LoadBalanceTest {
       val combinedDur = measureRequest(() => testController.sendRequest())
 
       println(s"$firstDur, $secondDur, $combinedDur")
-      while (getMilisTime < startTime + (j * testDurationMilis)) { }
+      while (getMilisTime < startTime + (j * waitTimeMilis)) { }
     }
   }
 

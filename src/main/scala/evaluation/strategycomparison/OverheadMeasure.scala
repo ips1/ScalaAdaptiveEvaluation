@@ -13,10 +13,22 @@ import scalaadaptive.core.configuration.blocks.selection._
 
 /**
   * Created by Petr Kubat on 7/1/17.
+  *
+  * Overhead measurement test. Uses combined sorting algorithm to run on a sequence of runCount arrays of 0 - maxDataSize
+  * elements.
+  *
+  * The output (written to standard output) is in CSV format, multiple tables are separated by an empty column.
+  * There is one table for each configuration and its rows have the following format:
+  * s"${r._1}, ${r._2.functionTime}, ${r._2.selectOverhead}, ${r._2.policyOverhead}"
+  *
+  * where _1 is the sequence number of the run. There is one row for each sampleFrequency runs. The time and overhead
+  * values are from one run, nothing is aggregated.
+  *
   */
 object OverheadMeasure {
   val runCount = 20000
   val maxDataSize = 2000
+  val sampleFrequency = 50
 
   class RunMeasure(val totalTime: Long, val functionTime: Long, val selectOverhead: Long) {
     val totalOverhead: Long = totalTime - functionTime
@@ -49,7 +61,7 @@ object OverheadMeasure {
     val results = inputs.map(in => (in._1, performTestStep(in._2, customSort)))
 
     val toPrint = results
-      .filter(r => r._1 % 50 == 0)
+      .filter(r => r._1 % sampleFrequency == 0)
       .map(r => s"${r._1}, ${r._2.functionTime}, ${r._2.selectOverhead}, ${r._2.policyOverhead}")
 
 

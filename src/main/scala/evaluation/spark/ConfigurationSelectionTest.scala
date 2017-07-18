@@ -17,8 +17,19 @@ import scalaadaptive.core.configuration.defaults.DefaultConfiguration
   *
   * The ScalaAdaptive test to choose between multiple SparkSQL adaptive configurations.
   *
+  * The environment should be set by changing the .master("local[1]")
+  *
+  * The test consists of generating a new Spark session testCount times with the combined function
+  * and using the session to execute a simple query runCount times on data of size either args[0] or dataSize.
+  *
+  * At the end of the test, the analytics data of the combined function are printed out.
+  *
   */
 object ConfigurationSelectionTest {
+  val dataSize = 10000
+  val testCount = 12
+  val runCount = 10
+
   def createBaseSparkSession(): Builder =
     SparkSession
       .builder
@@ -75,15 +86,12 @@ object ConfigurationSelectionTest {
 
   def main(args: Array[String]) {
 
-    val size = if (args.length > 0) args(0).toInt else 10000
+    val size = if (args.length > 0) args(0).toInt else dataSize
 
     Adaptive.initialize(new DefaultConfiguration)
 
     import scalaadaptive.api.Implicits._
     val createSession = firstManualSettings _ or secondManualSettings or disabled or default selectUsing Selection.MeanBased
-
-    val testCount = 12
-    val runCount = 10
 
     Seq.range(0, testCount).foreach(i => {
       val (spark, token) = createSession^()

@@ -9,8 +9,23 @@ import scalaadaptive.core.configuration.defaults.DefaultConfiguration
 
 /**
   * Created by Petr Kubat on 6/19/17.
+  *
+  * Test used for comparing JSON parsing times in a given scenario.
+  *
+  * The JSON files are stored in the resources directory.
+  *
+  * The test can be configured by setting the repeat counts and the usePolicy variable. The output of the test, printed
+  * to standard output, are run total and average run times after parsing each one of the files given number of times.
+  *
+  * The evaluation in the thesis was done by adding up these numbers.
+  *
   */
 object ComparisonTest {
+  val smallRepeatCount = 10000
+  val bigRepeatCount = 5000
+  val superBigRepeatCount = 200
+  val usePolicy = true
+
   private def measureParserRun(parser: (String, Class[PersonList]) => PersonList,
                                        data: String): Long = {
     val startTime = System.nanoTime()
@@ -56,11 +71,6 @@ object ComparisonTest {
     val superBigJsonString = Source.fromInputStream(getClass.getResourceAsStream("/json/SuperBigJsonData.json")).mkString
 
     Adaptive.initialize(new DefaultConfiguration with CachedStatisticsHistory)
-
-    val smallRepeatCount = 10000
-    val bigRepeatCount = 5000
-    val superBigRepeatCount = 200
-    val usePolicy = true
 
     // Small JSON
     runTestWithData("Small", smallJsonString, smallRepeatCount, usePolicy)

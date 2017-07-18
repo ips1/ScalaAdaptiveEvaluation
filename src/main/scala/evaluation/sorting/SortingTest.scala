@@ -12,6 +12,17 @@ import scalaadaptive.core.configuration.blocks.selection.{LinearRegressionInputB
 
 /**
   * Created by Petr Kubat on 7/3/17.
+  *
+  * The sorting test. Combines quick sort and selection sort algorithms.
+  *
+  * Generates a sequence of runCount arrays with 0 - maxDataSize elements. Then, for each configuration
+  * specified, sorts all the sequences using both simple sorting methods and the combined one.
+  *
+  * The outputs for each configuration are the run times in the following format:
+  * s"${res.inputSize}, ${res.combinedTime}, ${res.quickTime}, ${res.selectionTime}"
+  *
+  * sorted by inputSize for simpler plotting.
+  *
   */
 object SortingTest {
   val runCount = 500
@@ -45,9 +56,7 @@ object SortingTest {
       val quickTime = measureExecTime(() => sorter.quickSort(in._2))
       val selectionTime = measureExecTime(() => sorter.selectionSort(in._2))
       val lastRecord = customSort.getAnalyticsData.get.getAllRunInfo.last
-      val overhead = combinedTime - lastRecord.runTime
-      val selectedFun = lastRecord.selectedFunction.toString
-      new Result(in._2.length, combinedTime, quickTime, selectionTime)//, overhead, selectedFun)
+      new Result(in._2.length, combinedTime, quickTime, selectionTime)
     })
   }
 
@@ -103,18 +112,5 @@ object SortingTest {
 
     // Real run
     runTests(setups, inputs)
-
-    val quickSortRes = inputs.map(i => {
-      measureExecTime({ () => sorter.quickSort(i._2) })
-    })
-
-    val selectSortRes = inputs.map(i => {
-      measureExecTime({ () => sorter.selectionSort(i._2) })
-    })
-
-    println("Quick sort:")
-    println(quickSortRes.sum)
-    println("Selection sort:")
-    println(selectSortRes.sum)
   }
 }

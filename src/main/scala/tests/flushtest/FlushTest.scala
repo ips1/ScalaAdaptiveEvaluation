@@ -7,6 +7,7 @@ import scalaadaptive.api.options.Storage
 import scalaadaptive.api.Adaptive
 import scalaadaptive.core.configuration.blocks.selection.LoessInterpolationInputBasedStrategy
 import scalaadaptive.core.configuration.blocks.history.CachedGroupHistory
+import scalaadaptive.core.configuration.blocks.logging.ConsoleLogging
 
 /**
   * Created by Petr Kubat on 5/14/17.
@@ -17,7 +18,8 @@ object FlushTest {
 
     val runner = new TestRunner()
     val testMethods = new TestMethods()
-    Adaptive.initialize(new DefaultConfiguration with LoessInterpolationInputBasedStrategy with CachedGroupHistory)
+    Adaptive.initialize(new DefaultConfiguration with LoessInterpolationInputBasedStrategy
+      with CachedGroupHistory with ConsoleLogging)
 
     runner.runIncrementalTest(l => testMethods.function(l))
 
