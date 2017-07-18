@@ -1,0 +1,19 @@
+{
+  people: [
+  '{{repeat(40)}}',
+  {
+    id: '{{index()}}',
+    isActive: '{{bool()}}',
+    age: '{{integer(20, 40)}}',
+    name: '{{firstName()}} {{surname()}}',
+    email: '{{email()}}',
+    phone: '+1 {{phone()}}',
+    address: '{{integer(100, 999)}} {{street()}}, {{city()}}, {{state()}}, {{integer(100, 10000)}}',
+    about: '{{lorem(1, "paragraphs")}}',
+    tags: [
+      '{{repeat(10)}}',
+      '{{lorem(1, "words")}}'
+    ]
+  }
+]
+}
